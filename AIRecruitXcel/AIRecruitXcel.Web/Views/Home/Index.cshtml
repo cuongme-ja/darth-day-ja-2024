@@ -68,7 +68,7 @@
     var question = Model.Questions[i];
 
     <div class="card mt-3">
-      <h5 class="card-header">Question 1</h5>
+      <h5 class="card-header">Question @(i+1)</h5>
       <div class="card-body">
         <p class="card-text">
           <button class="btnPlay">
@@ -120,6 +120,11 @@
         <button type="submit" name="Action" value="Finish" class="btn btn-lg btn-warning">⭐ Finish interview</button>
       </div>
     </div>
+  }
+
+  @if (Model.IsFinishedReview && Model.Questions.Count > 0)
+  {
+    <partial name="_JobList" />
   }
 
 
