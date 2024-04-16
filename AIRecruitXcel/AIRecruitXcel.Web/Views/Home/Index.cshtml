@@ -10,9 +10,9 @@
   {
     <div class="alert alert-success" role="alert">
       <h4 class="alert-heading">Well done!</h4>
-      <p>Aww yeah, you successfully read this important alert message. This example text is going to run a bit longer so that you can see how spacing within an alert works with this kind of content.</p>
+      <p>Aww yeah, Congratulations on completing the interview session! You've demonstrated patience and relentless effort throughout this process. Whether the outcome meets your expectations or not, your participation and dedication mark significant progress in your personal development journey. Remember, every interview is an opportunity to learn and grow. Stay confident and keep refining your skills; success comes to those who persistently strive for it!</p>
       <hr>
-      <p class="mb-0">Whenever you need to, be sure to use margin utilities to keep things nice and tidy.</p>
+      <p class="mb-0">Believe in yourself and keep pushing forward; success is just around the corner!</p>
     </div>
   }
 
@@ -68,7 +68,7 @@
     var question = Model.Questions[i];
 
     <div class="card mt-3">
-      <h5 class="card-header">Question @(i+1)</h5>
+      <h5 class="card-header">Question @(i + 1)</h5>
       <div class="card-body">
         <p class="card-text">
           <button class="btnPlay">
@@ -97,6 +97,16 @@
                 <path d="M9.486 10.607 5 6.12V8a3 3 0 0 0 4.486 2.607m-7.84-9.253 12 12 .708-.708-12-12z" />
               </svg>
             </button>
+            @if (!string.IsNullOrEmpty(question.Hint))
+            {
+              <button type="button" data-bs-toggle="tooltip" data-bs-placement="top" data-bs-title="@question.Hint">
+                <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" class="bi bi-info-circle-fill" viewBox="0 0 16 16">
+                  <path d="M8 16A8 8 0 1 0 8 0a8 8 0 0 0 0 16m.93-9.412-1 4.705c-.07.34.029.533.304.533.194 0 .487-.07.686-.246l-.088.416c-.287.346-.92.598-1.465.598-.703 0-1.002-.422-.808-1.319l.738-3.468c.064-.293.006-.399-.287-.47l-.451-.081.082-.381 2.29-.287zM8 5.5a1 1 0 1 1 0-2 1 1 0 0 1 0 2" />
+                </svg>
+              </button>
+            }
+
+
           </label>
           <textarea class="form-control answer-control" name="Questions[@i].Answer" rows="6" @(Model.IsFinishedReview ? "disabled" : "")>@question.Answer</textarea>
 
@@ -137,7 +147,7 @@
 
   <script>
     // https://developer.mozilla.org/en-US/docs/Web/API/Web_Speech_API/Using_the_Web_Speech_API#speech_recognition
-    // Speech synthesis 
+    // Speech synthesis
     // https://mdn.github.io/dom-examples/web-speech-api/speak-easy-synthesis/
     var utterThis;
     const synth = window.speechSynthesis;
@@ -159,7 +169,7 @@
         utterThis.addEventListener("end", (event) => {
           btnRecords[index].click();
         })
-        
+
 
         utterThis.pitch = pitch;
         utterThis.rate = rate;
@@ -205,5 +215,8 @@
       currentAnswerControl.value = transcript;
     }
 
+
+    const tooltipTriggerList = document.querySelectorAll('[data-bs-toggle="tooltip"]')
+    const tooltipList = [...tooltipTriggerList].map(tooltipTriggerEl => new bootstrap.Tooltip(tooltipTriggerEl))
   </script>
 }

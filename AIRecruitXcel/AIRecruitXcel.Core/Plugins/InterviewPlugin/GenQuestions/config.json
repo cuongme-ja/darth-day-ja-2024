@@ -30,9 +30,15 @@
         "required": true
       },
       {
-        "name": "$question_separator",
+        "name": "question_separator",
         "description": "separator for each question",
         "defaultValue": "**",
+        "required": true
+      },
+      {
+        "name": "hint_separator",
+        "description": "separator for each question",
+        "defaultValue": "||",
         "required": true
       },
       {
