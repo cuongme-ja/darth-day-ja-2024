@@ -12,7 +12,7 @@ namespace AIRecruitXcel.Web
             string model = "gpt-3.5-turbo";
             string key = "key_placeholder";
             builder.Services.AddControllersWithViews();
-            builder.Services.AddScoped<ISemanticKernel>(x => new SemanticKernel(model, key));
+            builder.Services.AddScoped<IQuestionGenerator>(x => new QuestionGenerator(model, key));
 
             var app = builder.Build();
 

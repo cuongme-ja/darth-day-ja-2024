@@ -8,9 +8,9 @@ namespace AIRecruitXcel.Web.Controllers
     public class HomeController : Controller
     {
         private readonly ILogger<HomeController> _logger;
-        private readonly ISemanticKernel _sKernel ;
+        private readonly IQuestionGenerator _sKernel ;
 
-        public HomeController(ILogger<HomeController> logger, ISemanticKernel sKernel)
+        public HomeController(ILogger<HomeController> logger, IQuestionGenerator sKernel)
         {
             _sKernel = sKernel;
             _logger = logger;

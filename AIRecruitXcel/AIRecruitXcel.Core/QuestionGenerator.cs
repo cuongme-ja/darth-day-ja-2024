@@ -3,11 +3,11 @@ using System.Reflection;
 
 namespace AIRecruitXcel.Core;
 
-public class SemanticKernel: ISemanticKernel
+public class QuestionGenerator: IQuestionGenerator
 {
 
     private readonly Kernel _kernel;
-    public SemanticKernel(string model, string aIKey)
+    public QuestionGenerator(string model, string aIKey)
     {
         var builder = Kernel.CreateBuilder();
         builder.AddOpenAIChatCompletion(model, aIKey);
