@@ -1,5 +1,4 @@
-﻿using System.Collections.Generic;
-using Textkernel.Tx;
+﻿using Textkernel.Tx;
 using Textkernel.Tx.Models;
 using Textkernel.Tx.Models.API.Parsing;
 using Textkernel.Tx.Models.Resume.ContactInfo;

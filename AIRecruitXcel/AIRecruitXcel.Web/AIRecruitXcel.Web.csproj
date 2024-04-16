@@ -6,4 +6,8 @@
     <ImplicitUsings>enable</ImplicitUsings>
   </PropertyGroup>
 
+  <ItemGroup>
+    <ProjectReference Include="..\AIRecruitXcel.Core\AIRecruitXcel.Core.csproj" />
+  </ItemGroup>
+
 </Project>
