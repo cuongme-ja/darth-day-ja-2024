@@ -3,9 +3,11 @@ Microsoft Visual Studio Solution File, Format Version 12.00
 # Visual Studio Version 17
 VisualStudioVersion = 17.8.34309.116
 MinimumVisualStudioVersion = 10.0.40219.1
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "AIRecruitXcel", "AIRecruitXcel\AIRecruitXcel.csproj", "{63602294-D90A-4A29-9842-2921B16E687C}"
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "AIRecruitXcel.App", "AIRecruitXcel\AIRecruitXcel.App.csproj", "{63602294-D90A-4A29-9842-2921B16E687C}"
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "AIRecruitXcel.Web", "AIRecruitXcel.Web\AIRecruitXcel.Web.csproj", "{61F11B9C-BF2B-4A6D-BD27-AD8038393A4E}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "AIRecruitXcel.Core", "AIRecruitXcel.Core\AIRecruitXcel.Core.csproj", "{55EA3C9A-AEE5-45F5-AFE6-6F82DF01FE96}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
@@ -21,6 +23,10 @@ Global
 		{61F11B9C-BF2B-4A6D-BD27-AD8038393A4E}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{61F11B9C-BF2B-4A6D-BD27-AD8038393A4E}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{61F11B9C-BF2B-4A6D-BD27-AD8038393A4E}.Release|Any CPU.Build.0 = Release|Any CPU
+		{55EA3C9A-AEE5-45F5-AFE6-6F82DF01FE96}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{55EA3C9A-AEE5-45F5-AFE6-6F82DF01FE96}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{55EA3C9A-AEE5-45F5-AFE6-6F82DF01FE96}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{55EA3C9A-AEE5-45F5-AFE6-6F82DF01FE96}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
