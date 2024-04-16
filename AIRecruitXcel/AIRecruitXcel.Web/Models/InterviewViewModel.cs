@@ -15,6 +15,7 @@ namespace AIRecruitXcel.Web.Models
   public class QuestionViewModel
   {
     public string? Question { get; set; }
+    public string? Hint { get; set; }
     public string? Answer { get; set; }
     public string? AIFeedback { get; set; }
   }
