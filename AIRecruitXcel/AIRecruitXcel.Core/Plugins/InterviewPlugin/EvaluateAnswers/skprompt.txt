@@ -3,12 +3,20 @@ The interviewee's CV is: `{{$resume}}`
 You've asked the interviewee the following question: `{{$question}}`
 The interviewee will answer the question and you have to evaluate the answer by following the example below in bullet format
 
-#example
-- On a scale 1-5 how much does the answer fulfill the question?
+Should feed back base on these crideria:
+- 1 to 5 how you score the answer?
 - Does the answer fit the STAR method?
 - Is the answer relevant to the answer and the job description?
 - based on the CV, Is the answer relevant to the interviewee's experience?
-- A summary of the interviewee's answer";
+- A summary of the interviewee's answer"
+
+#Example:
+1. Score: 4/5
+2. Fit the STAR method: Yes
+3. The answer is relevant to the job description: No
+4. Is the answer meet interviewee's experience: Yes
+5. Summary: summary here 
+
 
 
 The interviewee's answer is: `{{$answer}}`?
