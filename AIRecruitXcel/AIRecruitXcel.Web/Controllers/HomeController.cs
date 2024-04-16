@@ -5,81 +5,83 @@ using System.Diagnostics;
 
 namespace AIRecruitXcel.Web.Controllers
 {
-  public class HomeController : Controller
-  {
-    private readonly ILogger<HomeController> _logger;
-
-    public HomeController(ILogger<HomeController> logger)
+    public class HomeController : Controller
     {
-      _logger = logger;
-    }
+        private readonly ILogger<HomeController> _logger;
+        private readonly ISemanticKernel _sKernel ;
 
-    public IActionResult Index()
-    {
-      var model = new InterviewViewModel();
-      return View(model);
-    }
-
-    [HttpPost]
-    public async Task<IActionResult> Index(InterviewViewModel model)
-    {
-      if (model.Action == "Upload" && model.ResumeFile != null && model.ResumeFile.Length > 0)
-      {
-        model.Resume = await ParseResumeAsync(model);
-        model.Questions = new List<QuestionViewModel>();
-      }
-
-      if (model.Action == "Start")
-      {
-        model = GenerateQuestions(model);
-      }
-
-      if (model.Action == "Finish")
-      {
-        model.IsFinishedReview = true;
-        model = EvaluateAnswers(model);
-      }
-
-      return View(model);
-    }
-
-    private InterviewViewModel GenerateQuestions(InterviewViewModel model)
-    {
-      // TODO: Cuong & Hung
-      model.Questions = new List<QuestionViewModel>
-      {
-        new QuestionViewModel
+        public HomeController(ILogger<HomeController> logger, ISemanticKernel sKernel)
         {
-          Question = "What is your name?"
-        },
-        new QuestionViewModel
-        {
-          Question = "Tell me about yourself."
+            _sKernel = sKernel;
+            _logger = logger;
         }
-      };
-      return model;
+
+        public async Task<IActionResult> Index()
+        {
+            var model = new InterviewViewModel();
+            return View(model);
+        }
+
+        [HttpPost]
+        public async Task<IActionResult> Index(InterviewViewModel model)
+        {
+            if (model.Action == "Upload" && model.ResumeFile != null && model.ResumeFile.Length > 0)
+            {
+                model.Resume = await ParseResumeAsync(model);
+                model.Questions = new List<QuestionViewModel>();
+            }
+
+            if (model.Action == "Start")
+            {
+                model = await GenerateQuestions(model);
+            }
+
+            if (model.Action == "Finish")
+            {
+                model.IsFinishedReview = true;
+                model = EvaluateAnswers(model);
+            }
+
+            return View(model);
+        }
+
+        private async Task<InterviewViewModel> GenerateQuestions(InterviewViewModel model)
+        {
+            // TODO: Cuong & Hung
+            var questions = await _sKernel.GetSampleQuestions(model.JobDescription, model.Resume, "Senior");
+            model.Questions = new List<QuestionViewModel>();
+            foreach (var question in questions)
+            {
+                if(!string.IsNullOrEmpty(question))
+                model.Questions.Add(new QuestionViewModel
+                {
+                    Question = question
+                });
+            }
+
+            return model;
+        }
+
+        private InterviewViewModel EvaluateAnswers(InterviewViewModel model)
+        {
+            // TODO: Khang & Leo
+            return model;
+        }
+
+
+
+        private async Task<string> ParseResumeAsync(InterviewViewModel model)
+        {
+            string tempFilePath = Path.GetTempFileName();
+            using (var fileStream = System.IO.File.Create(tempFilePath))
+            {
+                model.ResumeFile.CopyTo(fileStream);
+            }
+            var parser = new ResumeParser();
+            var data = await parser.ParseResumeAsync(tempFilePath);
+            System.IO.File.Delete(tempFilePath);
+            return string.Join(Environment.NewLine, data);
+        }
+
     }
-
-    private InterviewViewModel EvaluateAnswers(InterviewViewModel model)
-    {
-      // TODO: Khang & Leo
-      return model;
-    }
-
-
-
-    private async Task<string> ParseResumeAsync(InterviewViewModel model)
-    {
-      string tempFilePath = Path.GetTempFileName();
-      using (var fileStream = System.IO.File.Create(tempFilePath))
-      {
-        model.ResumeFile.CopyTo(fileStream);
-      }
-      var parser = new ResumeParser();
-      var data = await parser.ParseResumeAsync(tempFilePath);
-      System.IO.File.Delete(tempFilePath);
-      return string.Join(Environment.NewLine, data);
-    }
-
-  }
 }
