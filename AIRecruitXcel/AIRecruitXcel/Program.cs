@@ -8,7 +8,8 @@ namespace AIRecruitXcel.App
     {
       var p = new ResumeParser();
 
-      await p.PrintResumeAsync("Resumes/MahafujAnsari.pdf");
+      var r = await p.ParseResumeAsync("Resumes/MahafujAnsari.pdf");
+      r.ForEach(line => Console.WriteLine(line));
     }
   }
 }

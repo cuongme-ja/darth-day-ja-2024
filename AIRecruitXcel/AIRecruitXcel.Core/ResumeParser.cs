@@ -1,4 +1,5 @@
-﻿using Textkernel.Tx;
+﻿using System.Collections.Generic;
+using Textkernel.Tx;
 using Textkernel.Tx.Models;
 using Textkernel.Tx.Models.API.Parsing;
 using Textkernel.Tx.Models.Resume.ContactInfo;
@@ -14,8 +15,8 @@ namespace AIRecruitXcel.Core
     {
       _client = new TxClient(httpClient, new TxClientSettings
       {
-        AccountId = "31640102",
-        ServiceKey = "5TVEEY7TxcIBY/WHX5dm6YUVx+OXTzwOgFymRhAD",
+        AccountId = "change-me",
+        ServiceKey = "change-me",
         DataCenter = DataCenter.US
       });
     }
@@ -25,8 +26,10 @@ namespace AIRecruitXcel.Core
     /// </summary>
     /// <param name="path"></param>
     /// <returns></returns>
-    public async Task PrintResumeAsync(string path)
+    public async Task<List<string>> ParseResumeAsync(string path)
     {
+      var resume = new List<string>();
+
       // A Document is an unparsed File(PDF, Word Doc, etc)
       Document doc = new Document(path);
 
@@ -40,7 +43,7 @@ namespace AIRecruitXcel.Core
         //if we get here, it was 200-OK and all operations succeeded
 
         //now we can use the response to output some of the data from the resume
-        PrintBasicResumeInfo(response);
+        resume = PrintBasicResumeInfo(response);
       }
       catch (TxException e)
       {
@@ -48,79 +51,102 @@ namespace AIRecruitXcel.Core
         Console.WriteLine($"Error: {e.TxErrorCode}, Message: {e.Message}");
       }
 
+      return resume;
+
     }
 
-    static void PrintBasicResumeInfo(ParseResumeResponse response)
+    static List<string> PrintBasicResumeInfo(ParseResumeResponse response)
     {
-      PrintContactInfo(response);
-      PrintPersonalInfo(response);
-      PrintWorkHistory(response.Value);
-      PrintEducation(response.Value);
+      var resume = new List<string>();
+
+      resume.AddRange(PrintContactInfo(response));
+      resume.AddRange(PrintPersonalInfo(response));
+      resume.AddRange(PrintWorkHistory(response.Value));
+      resume.AddRange(PrintEducation(response.Value));
+      return resume;
     }
 
-    static void PrintHeader(string headerName)
+    static List<string> PrintHeader(string headerName)
     {
-      Console.WriteLine($"{Environment.NewLine}{Environment.NewLine}--------------- {headerName} ---------------");
+      var header = new List<string>
+      {
+        "",
+        "",
+        $"--------------- {headerName} ---------------"
+      };
+      return header;
     }
 
-    static void PrintContactInfo(ParseResumeResponse response)
+    static List<string> PrintContactInfo(ParseResumeResponse response)
     {
+      var lines = new List<string>();
       //general contact information (only some examples listed here, there are many others)
-      PrintHeader("CONTACT INFORMATION");
-      Console.WriteLine("Name: " + response.EasyAccess().GetCandidateName()?.FormattedName);
-      Console.WriteLine("Email: " + response.EasyAccess().GetEmailAddresses()?.FirstOrDefault());
-      Console.WriteLine("Phone: " + response.EasyAccess().GetPhoneNumbers()?.FirstOrDefault());
-      Console.WriteLine("City: " + response.EasyAccess().GetContactInfo()?.Location?.Municipality);
-      Console.WriteLine("Region: " + response.EasyAccess().GetContactInfo()?.Location?.Regions?.FirstOrDefault());
-      Console.WriteLine("Country: " + response.EasyAccess().GetContactInfo()?.Location?.CountryCode);
-      Console.WriteLine("LinkedIn: " + response.EasyAccess().GetWebAddress(WebAddressType.LinkedIn));
+      lines.AddRange(PrintHeader("CONTACT INFORMATION"));
+      lines.Add("Name: " + response.EasyAccess().GetCandidateName()?.FormattedName);
+      lines.Add("Email: " + response.EasyAccess().GetEmailAddresses()?.FirstOrDefault());
+      lines.Add("Phone: " + response.EasyAccess().GetPhoneNumbers()?.FirstOrDefault());
+      lines.Add("City: " + response.EasyAccess().GetContactInfo()?.Location?.Municipality);
+      lines.Add("Region: " + response.EasyAccess().GetContactInfo()?.Location?.Regions?.FirstOrDefault());
+      lines.Add("Country: " + response.EasyAccess().GetContactInfo()?.Location?.CountryCode);
+      lines.Add("LinkedIn: " + response.EasyAccess().GetWebAddress(WebAddressType.LinkedIn));
+
+      return lines;
     }
 
-    static void PrintPersonalInfo(ParseResumeResponse response)
+    static List<string> PrintPersonalInfo(ParseResumeResponse response)
     {
+      var lines = new List<string>();
       //personal information (only some examples listed here, there are many others)
-      PrintHeader("PERSONAL INFORMATION");
-      Console.WriteLine("Date of Birth: " + response.EasyAccess().GetDateOfBirth()?.Date.ToShortDateString());
-      Console.WriteLine("Driving License: " + response.EasyAccess().GetDrivingLicense());
-      Console.WriteLine("Nationality: " + response.EasyAccess().GetNationality());
-      Console.WriteLine("Visa Status: " + response.EasyAccess().GetVisaStatus());
+      lines.AddRange(PrintHeader("PERSONAL INFORMATION"));
+      lines.Add("Date of Birth: " + response.EasyAccess().GetDateOfBirth()?.Date.ToShortDateString());
+      lines.Add("Driving License: " + response.EasyAccess().GetDrivingLicense());
+      lines.Add("Nationality: " + response.EasyAccess().GetNationality());
+      lines.Add("Visa Status: " + response.EasyAccess().GetVisaStatus());
+
+      return lines;
     }
 
-    static void PrintWorkHistory(ParseResumeResponseValue response)
+    static List<string> PrintWorkHistory(ParseResumeResponseValue response)
     {
+      var lines = new List<string>();
       //basic work history display
-      PrintHeader("EXPERIENCE SUMMARY");
-      Console.WriteLine("Years Experience: " + Math.Round((response.ResumeData?.EmploymentHistory?.ExperienceSummary?.MonthsOfWorkExperience ?? 0) / 12.0, 1));
-      Console.WriteLine("Avg Years Per Employer: " + Math.Round((response.ResumeData?.EmploymentHistory?.ExperienceSummary?.AverageMonthsPerEmployer ?? 0) / 12.0, 1));
-      Console.WriteLine("Years Management Experience: " + Math.Round((response.ResumeData?.EmploymentHistory?.ExperienceSummary?.MonthsOfManagementExperience ?? 0) / 12.0, 1));
+      lines.AddRange(PrintHeader("EXPERIENCE SUMMARY"));
+      lines.Add("Years Experience: " + Math.Round((response.ResumeData?.EmploymentHistory?.ExperienceSummary?.MonthsOfWorkExperience ?? 0) / 12.0, 1));
+      lines.Add("Avg Years Per Employer: " + Math.Round((response.ResumeData?.EmploymentHistory?.ExperienceSummary?.AverageMonthsPerEmployer ?? 0) / 12.0, 1));
+      lines.Add("Years Management Experience: " + Math.Round((response.ResumeData?.EmploymentHistory?.ExperienceSummary?.MonthsOfManagementExperience ?? 0) / 12.0, 1));
 
       response.ResumeData?.EmploymentHistory?.Positions?.ForEach(position =>
       {
-        Console.WriteLine($"{Environment.NewLine}POSITION '{position.Id}'");
-        Console.WriteLine($"Employer: {position.Employer?.Name?.Normalized}");
-        Console.WriteLine($"Title: {position.JobTitle?.Normalized}");
-        Console.WriteLine($"Date Range: {GetTxDateAsString(position.StartDate)} - {GetTxDateAsString(position.EndDate)}");
+        lines.Add($"{Environment.NewLine}POSITION '{position.Id}'");
+        lines.Add($"Employer: {position.Employer?.Name?.Normalized}");
+        lines.Add($"Title: {position.JobTitle?.Normalized}");
+        lines.Add($"Date Range: {GetTxDateAsString(position.StartDate)} - {GetTxDateAsString(position.EndDate)}");
       });
+
+      return lines;
     }
 
-    static void PrintEducation(ParseResumeResponseValue response)
+    static List<string> PrintEducation(ParseResumeResponseValue response)
     {
+      var lines = new List<string>();
       //basic education display
-      PrintHeader("EDUCATION SUMMARY");
-      Console.WriteLine($"Highest Degree: {response.ResumeData?.Education?.HighestDegree?.Name?.Normalized}");
+      lines.AddRange(PrintHeader("EDUCATION SUMMARY"));
+      lines.Add($"Highest Degree: {response.ResumeData?.Education?.HighestDegree?.Name?.Normalized}");
 
       response.ResumeData?.Education?.EducationDetails?.ForEach(edu =>
       {
-        Console.WriteLine($"{Environment.NewLine}EDUCATION '{edu.Id}'");
-        Console.WriteLine($"School: {edu.SchoolName?.Normalized}");
-        Console.WriteLine($"Degree: {edu.Degree?.Name?.Normalized}");
+        lines.Add($"{Environment.NewLine}EDUCATION '{edu.Id}'");
+        lines.Add($"School: {edu.SchoolName?.Normalized}");
+        lines.Add($"Degree: {edu.Degree?.Name?.Normalized}");
         if (edu.Majors != null)
-          Console.WriteLine($"Focus: {string.Join(", ", edu.Majors)}");
+          lines.Add($"Focus: {string.Join(", ", edu.Majors)}");
         if (edu.GPA != null)
-          Console.WriteLine($"GPA: {edu.GPA?.NormalizedScore}/1.0 ({edu.GPA?.Score}/{edu.GPA?.MaxScore})");
+          lines.Add($"GPA: {edu.GPA?.NormalizedScore}/1.0 ({edu.GPA?.Score}/{edu.GPA?.MaxScore})");
         //string endDateRepresents = edu.Graduated.Value ? "Graduated" : "Last Attended";
         //Console.WriteLine($"{endDateRepresents}: {GetTxDateAsString(edu.EndDate)}");
       });
+
+      return lines;
     }
 
     static string GetTxDateAsString(TxDate date)
