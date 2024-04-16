@@ -3,11 +3,11 @@ using System.Reflection;
 
 namespace AIRecruitXcel.Core;
 
-public class QuestionGenerator: IQuestionGenerator
+public class InterviewSupporter: IInterviewSupporter
 {
 
     private readonly Kernel _kernel;
-    public QuestionGenerator(string model, string aIKey)
+    public InterviewSupporter(string model, string aIKey)
     {
         var builder = Kernel.CreateBuilder();
         builder.AddOpenAIChatCompletion(model, aIKey);
@@ -23,10 +23,12 @@ public class QuestionGenerator: IQuestionGenerator
         {
             const string questionsSeparater = "*question_end*";
             var arguments = new KernelArguments() { 
-                ["jd"] = Mock.JD, ["number_of_questions"] = 8, 
+                ["jd"] = jd, 
+                ["number_of_questions"] = 8, 
                 ["level"] = level,
                 ["resume"] = resume,
-                ["question_separator"] = questionsSeparater };
+                ["question_separator"] = questionsSeparater 
+            };
 
             var plugin = _kernel.Plugins["InterviewPlugin"];
             var genQuestionsfunction = plugin["GenQuestions"];
@@ -41,6 +43,26 @@ public class QuestionGenerator: IQuestionGenerator
         {
             throw ex;
         }
+    }
+
+    public async Task<string> EvaluateAnswers(string jd, string resume, string question, string answer)
+    {
+        var arguments = new KernelArguments()
+        {
+            ["jd"] = jd,
+            ["resume"] = resume,
+            ["question"] = question,
+            ["answer"] = answer
+        };
+
+        var plugin = _kernel.Plugins["InterviewPlugin"];
+        var evalAnswerfunction = plugin["EvaluateAnswers"];
+
+        var result = await _kernel.InvokeAsync(evalAnswerfunction, arguments);
+
+        var eval = result.GetValue<string>();
+
+        return eval;
     }
 }
 

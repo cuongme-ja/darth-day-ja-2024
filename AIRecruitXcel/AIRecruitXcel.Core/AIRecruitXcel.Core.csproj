@@ -7,10 +7,16 @@
   </PropertyGroup>
 
   <ItemGroup>
+    <None Remove="Plugins\InterviewPlugin\EvaluateAnswers\config.json" />
     <None Remove="Plugins\InterviewPlugin\GenQuestions\config.json" />
   </ItemGroup>
 
   <ItemGroup>
+    <Content Include="Plugins\InterviewPlugin\EvaluateAnswers\config.json">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+      <ExcludeFromSingleFile>true</ExcludeFromSingleFile>
+      <CopyToPublishDirectory>PreserveNewest</CopyToPublishDirectory>
+    </Content>
     <Content Include="Plugins\InterviewPlugin\GenQuestions\config.json">
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
       <ExcludeFromSingleFile>true</ExcludeFromSingleFile>
@@ -24,6 +30,9 @@
   </ItemGroup>
 
   <ItemGroup>
+    <None Update="Plugins\InterviewPlugin\EvaluateAnswers\skprompt.txt">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </None>
     <None Update="Plugins\InterviewPlugin\GenQuestions\skprompt.txt">
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </None>

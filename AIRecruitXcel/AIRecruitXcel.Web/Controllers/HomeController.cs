@@ -2,15 +2,16 @@ using AIRecruitXcel.Core;
 using AIRecruitXcel.Web.Models;
 using Microsoft.AspNetCore.Mvc;
 using System.Diagnostics;
+using System.Runtime.InteropServices.Marshalling;
 
 namespace AIRecruitXcel.Web.Controllers
 {
     public class HomeController : Controller
     {
         private readonly ILogger<HomeController> _logger;
-        private readonly IQuestionGenerator _sKernel ;
+        private readonly IInterviewSupporter _sKernel;
 
-        public HomeController(ILogger<HomeController> logger, IQuestionGenerator sKernel)
+        public HomeController(ILogger<HomeController> logger, IInterviewSupporter sKernel)
         {
             _sKernel = sKernel;
             _logger = logger;
@@ -52,11 +53,11 @@ namespace AIRecruitXcel.Web.Controllers
             model.Questions = new List<QuestionViewModel>();
             foreach (var question in questions)
             {
-                if(!string.IsNullOrEmpty(question))
-                model.Questions.Add(new QuestionViewModel
-                {
-                    Question = question
-                });
+                if (!string.IsNullOrEmpty(question))
+                    model.Questions.Add(new QuestionViewModel
+                    {
+                        Question = question
+                    });
             }
 
             return model;
@@ -64,11 +65,12 @@ namespace AIRecruitXcel.Web.Controllers
 
         private InterviewViewModel EvaluateAnswers(InterviewViewModel model)
         {
-            // TODO: Khang & Leo
+            foreach (var question in model.Questions.Where(x => !string.IsNullOrEmpty(x.Answer)))
+            {
+                question.AIFeedback = _sKernel.EvaluateAnswers(model.JobDescription, model.Resume, question.Question, question.Answer).Result;
+            }
             return model;
         }
-
-
 
         private async Task<string> ParseResumeAsync(InterviewViewModel model)
         {
