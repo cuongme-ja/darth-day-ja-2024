@@ -12,9 +12,9 @@ Should feed back base on these crideria:
 
 #Example:
 1. Score: 4/5
-2. Fit the STAR method: Yes
-3. The answer is relevant to the job description: No
-4. Is the answer meet interviewee's experience: Yes
+2. Does the answer fit the STAR method?: You reply here
+3. Is the answer relevant to the answer and the job description?: You reply here
+4. How the answer meet interviewee's experience:  You reply here
 5. Summary: summary here 
 
 
