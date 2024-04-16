@@ -2,6 +2,7 @@ using AIRecruitXcel.Core;
 using AIRecruitXcel.Web.Models;
 using Microsoft.AspNetCore.Mvc;
 using System.Diagnostics;
+using System.Runtime.InteropServices.Marshalling;
 
 namespace AIRecruitXcel.Web.Controllers
 {
@@ -62,7 +63,12 @@ namespace AIRecruitXcel.Web.Controllers
 
     private InterviewViewModel EvaluateAnswers(InterviewViewModel model)
     {
-      // TODO: Khang & Leo
+      var evaluator = new AnswerEvaluator();
+      foreach(var question in model.Questions.Where(x=>!string.IsNullOrEmpty(x.Answer)))
+      {
+        question.AIFeedback = evaluator.EvaluateAsync(model.JobDescription, model.Resume, question.Question, question.Answer).Result;
+      }
+      
       return model;
     }
 
