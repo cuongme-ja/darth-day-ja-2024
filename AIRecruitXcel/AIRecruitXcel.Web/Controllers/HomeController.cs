@@ -32,7 +32,7 @@ namespace AIRecruitXcel.Web.Controllers
         model.Questions = new List<QuestionViewModel>();
       }
 
-      if (model.Action == "Start")
+      if (model.Action == "Start" && !string.IsNullOrEmpty(model.JobDescription) && !string.IsNullOrEmpty(model.Resume))
       {
         model = await GenerateQuestions(model);
       }
