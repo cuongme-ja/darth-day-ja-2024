@@ -113,7 +113,7 @@
           @if (Model.IsFinishedReview && !string.IsNullOrEmpty(question.AIFeedback))
           {
             <div class="alert alert-primary mt-3" role="alert">
-              <span>🤖: </span><span>@question.AIFeedback</span>
+              <span>🤖: </span><span>@Html.Raw(question.AIFeedback)</span>
             </div>
           }
         </div>

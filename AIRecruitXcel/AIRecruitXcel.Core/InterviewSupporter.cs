@@ -17,20 +17,18 @@ public class InterviewSupporter : IInterviewSupporter
     _kernel = builder.Build();
   }
 
-  public async Task<List<string>> GetSampleQuestions(string jd, string resume, string level)
-  {
-    try
+    public async Task<List<string>> GetSampleQuestions(string jd, string resume, string level)
     {
-      const string questionsSeparater = "*question_end*";
-      var arguments = new KernelArguments()
-      {
-        ["jd"] = jd,
-        ["number_of_questions"] = 2,
-        ["level"] = level,
-        ["resume"] = resume,
-        ["question_separator"] = questionsSeparater,
-        ["hint_separator"] = "||"
-      };
+        try
+        {
+            const string questionsSeparater = "*question_end*";
+            var arguments = new KernelArguments() { 
+                ["jd"] = jd, 
+                ["number_of_questions"] = 2, 
+                ["level"] = level,
+                ["resume"] = resume,
+                ["question_separator"] = questionsSeparater 
+            };
 
       var plugin = _kernel.Plugins["InterviewPlugin"];
       var genQuestionsfunction = plugin["GenQuestions"];
