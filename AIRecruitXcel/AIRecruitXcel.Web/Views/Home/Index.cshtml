@@ -97,7 +97,7 @@
                 <path d="M9.486 10.607 5 6.12V8a3 3 0 0 0 4.486 2.607m-7.84-9.253 12 12 .708-.708-12-12z" />
               </svg>
             </button>
-            @if (!string.IsNullOrEmpty(question.Hint))
+            @if (!Model.HintDisabled && !string.IsNullOrEmpty(question.Hint))
             {
               <button type="button" data-bs-toggle="tooltip" data-bs-placement="top" data-bs-title="@question.Hint">
                 <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" class="bi bi-info-circle-fill" viewBox="0 0 16 16">
@@ -132,12 +132,12 @@
     </div>
   }
 
-  @if (Model.IsFinishedReview && Model.Questions.Count > 0)
+  @if (!Model.HintDisabled && Model.IsFinishedReview && Model.Questions.Count > 0)
   {
     <partial name="_JobList" />
   }
-
-
+  
+  <input type="hidden" name="HintDisabled" value="@Model.HintDisabled" />
 
 </form>
 

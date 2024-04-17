@@ -3,6 +3,7 @@ namespace AIRecruitXcel.Web.Models
   public class InterviewViewModel
   {
     public bool IsFinishedReview { get; set; }
+    public bool HintDisabled { get; set; }
 
     public string Action { get; set; }
 
