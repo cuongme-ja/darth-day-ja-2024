@@ -25,7 +25,7 @@ public class InterviewSupporter : IInterviewSupporter
       var arguments = new KernelArguments()
       {
         ["jd"] = jd,
-        ["number_of_questions"] = 2,
+        ["number_of_questions"] = 4,
         ["level"] = level,
         ["resume"] = resume,
         ["question_separator"] = questionsSeparater,
